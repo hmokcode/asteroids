@@ -1,7 +1,8 @@
 import pygame
 from circleshape import CircleShape
 from constants import (PLAYER_RADIUS, PLAYER_TURN_SPEED, 
-                       PLAYER_SPEED, SHOT_RADIUS, PLAYER_SHOT_SPEED)
+                       PLAYER_SPEED, SHOT_RADIUS, PLAYER_SHOT_SPEED,
+                       PLAYER_SHOOT_COOLDOWN)
 from bullet import *
 
 class Player(CircleShape):
@@ -10,6 +11,7 @@ class Player(CircleShape):
         """Create a new player"""
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
+        self.timer = 0
     
     def triangle(self):
         """Calculate the three points that mak up the play triangle"""#I copied this one
@@ -32,6 +34,8 @@ class Player(CircleShape):
         """Player input for moving/shooting"""
         keys = pygame.key.get_pressed()
 
+        self.timer -= dt
+
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
@@ -41,7 +45,9 @@ class Player(CircleShape):
         if keys[pygame.K_s]:
             self.move(-dt)
         if keys[pygame.K_SPACE]:
-            self.shoot()
+            if self.timer <= 0:
+                self.shoot()
+                self.timer = PLAYER_SHOOT_COOLDOWN
         
     def move(self, dt):
         """Move the player in the direction they're facing"""
