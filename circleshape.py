@@ -1,9 +1,11 @@
+"""Base class for circular game objects with position and collision detection"""
 import pygame
 from player import *
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
     def __init__(self, x, y, radius):
+        """Create a new circular shape at the specified location"""
         # we will be using this later
         if hasattr(self, "containers"):
             super().__init__(self.containers)
@@ -15,6 +17,7 @@ class CircleShape(pygame.sprite.Sprite):
         self.radius = radius
 
     def collisions(self, other):
+        """Check for collisions between two circles"""
         distance = self.position.distance_to(other.position)
         if distance <= self.radius + other.radius:
             return True

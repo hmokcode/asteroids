@@ -5,6 +5,10 @@ from constants import *
 
 
 class AsteroidField(pygame.sprite.Sprite):
+    """Manages the spawning and placement of asteroids in the game 
+    Contains logic for spawning asteroids at screen edges and controlling their movement"""
+
+    # Define possible spawn edges and their corresponding position calcs
     edges = [
         [
             pygame.Vector2(1, 0),
@@ -29,14 +33,19 @@ class AsteroidField(pygame.sprite.Sprite):
     ]
 
     def __init__(self):
+        """Create an asteroid field with a spawn timer"""
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
 
     def spawn(self, radius, position, velocity):
+        """Create a new asteroid with the given parameters.
+        Creates an asteroid at the specified position with given radius and velocity."""
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
 
     def update(self, dt):
+        """Update the asteroid field and spawn new asteroids periodically. 
+        Manages the spawn timer and creates new asteroids at random edges."""
         self.spawn_timer += dt
         if self.spawn_timer > ASTEROID_SPAWN_RATE:
             self.spawn_timer = 0
